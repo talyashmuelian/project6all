@@ -107,6 +107,7 @@ exports.put = function (tableName, data) {
       con.query(sql, [data, data.id], function (err, result) {
         if (err) throw err;
         console.log("Member updated successfully.");
+        return true;
       });
     }
   });

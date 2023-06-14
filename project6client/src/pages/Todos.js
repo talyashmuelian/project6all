@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
 import "./Todos.css";
+import {
+  requestsGet,
+  requestsPost,
+  requestsPut,
+  requestsDelete,
+} from "../requestsToServer.js";
 
 const Select = ({ onSort }) => {
   const [selectedValue, setSelectedValue] = useState("");
@@ -32,10 +38,12 @@ const Todos = () => {
     async function fetchData() {
       try {
         var user = JSON.parse(localStorage.getItem("currentUser"));
-        const response = await fetch(
-          `http://localhost:4000/users/${user.id}/todos`
-        );
-        const data = await response.json();
+        const data = await requestsGet(`/users/${user.id}/todos`);
+
+        // const response = await fetch(
+        //   `http://localhost:4000/users/${user.id}/todos`
+        // );
+        // const data = await response.json();
         setTodos(data);
       } catch (error) {
         console.error(error);
@@ -46,15 +54,19 @@ const Todos = () => {
   }, []);
 
   const handleToggleTodo = (id) => {
+    let newObj;
     const updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
-        return {
+        newObj = {
           ...todo,
           completed: !todo.completed,
         };
+        requestsPut(`/todos/${id}`, newObj);
+        return newObj;
       }
       return todo;
     });
+
     setTodos(updatedTodos);
   };
 

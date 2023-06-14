@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 import "./Posts.css";
+import {
+  requestsGet,
+  requestsPost,
+  requestsPut,
+  requestsDelete,
+} from "../requestsToServer.js";
 
 const Post = ({ post, onPostSelect }) => {
   const [showComments, setShowComments] = useState(false);
@@ -10,10 +16,11 @@ const Post = ({ post, onPostSelect }) => {
       setShowComments(false);
     } else {
       try {
-        const response = await fetch(
-          `http://localhost:4000/posts/${post.id}/comments`
-        );
-        const data = await response.json();
+        const data = await requestsGet(`/posts/${post.id}/comments`);
+        // const response = await fetch(
+        //   `http://localhost:4000/posts/${post.id}/comments`
+        // );
+        // const data = await response.json();
         setComments(data);
         setShowComments(true);
       } catch (error) {
@@ -57,10 +64,12 @@ const Posts = () => {
     async function fetchData() {
       try {
         var user = JSON.parse(localStorage.getItem("currentUser"));
-        const response = await fetch(
-          `http://localhost:4000/users/${user.id}/posts`
-        );
-        const data = await response.json();
+
+        const data = await requestsGet(`/users/${user.id}/posts`);
+        // const response = await fetch(
+        //   `http://localhost:4000/users/${user.id}/posts`
+        // );
+        // const data = await response.json();
         console.log(data);
         setPosts(data);
       } catch (error) {
