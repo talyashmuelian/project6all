@@ -1,6 +1,9 @@
 import { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./Login.css";
+import {
+  requestsGet
+} from "../requestsToServer.js";
 
 const Login = () => {
   const [inputs, setInputs] = useState({});
@@ -13,10 +16,11 @@ const Login = () => {
 
   async function fetchData() {
     try {
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      const data = await response.json();
+      const data = await requestsGet(`/users`);
+      // const response = await fetch(
+      //   "https://jsonplaceholder.typicode.com/users"
+      // );
+      // const data = await response.json();
       console.log(data);
       let latArr;
       let exist = false;

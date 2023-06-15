@@ -24,9 +24,9 @@ const Users = () => {
           <li>
             <Link to={`/Users/${user.id}/Todos`}>Todos</Link>
           </li>
-          <li>
+          {/* <li>
             <Link to={`/Users/${user.id}/Albums`}>Albums</Link>
-          </li>
+          </li> */}
           <li>
             <Link to={`/Users/${user.id}/Info`}>Info</Link>
           </li>

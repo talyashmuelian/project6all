@@ -1,5 +1,5 @@
-const hostname = "http://localhost:4000";
-//const hostname = "https://jsonplaceholder.typicode.com";
+//const hostname = "http://localhost:4000";
+const hostname = "https://jsonplaceholder.typicode.com";
 //"http://localhost:4000";
 
 export async function requestsGet(path) {
