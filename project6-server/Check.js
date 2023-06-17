@@ -1,63 +1,51 @@
 import Joi from "joi";
 
-const Joi = require('joi');
+const Joi = require("joi");
 
 const schemaUser = Joi.object().keys({
   id: Joi.number().required(),
   name: Joi.string().required(),
   username: Joi.string().required(),
   email: Joi.string().email().required(),
-  address: Joi.object().keys({
-    street: Joi.string().required(),
-    suite: Joi.string().required(),
-    city: Joi.string().required(),
-    zipcode: Joi.string().required(),
-    geo: Joi.object().keys({
-      lat: Joi.string().required(),
-      lng: Joi.string().required()
-    }).required()
-  }).required(),
+
   phone: Joi.string().required(),
   website: Joi.string().uri().required(),
-  company: Joi.object().keys({
-    name: Joi.string().required(),
-    catchPhrase: Joi.string().required(),
-    bs: Joi.string().required()
-  }).required()
+  rank: Joi.string().required(),
+  api_key: Joi.string().required(),
 });
 
 const schemaTodo = Joi.object().keys({
-    userId: Joi.number().required(),
-    id: Joi.number().required(),
-    title: Joi.string().required(),
-    completed: Joi.boolean().required()
-  });
+  userId: Joi.number().required(),
+  id: Joi.number().required(),
+  title: Joi.string().required(),
+  completed: Joi.boolean().required(),
+});
 
 const schemaPosts = Joi.object().keys({
-    userId: Joi.number().required(),
-    id: Joi.number().required(),
-    title: Joi.string().required(),
-    body: Joi.string().required()
+  userId: Joi.number().required(),
+  id: Joi.number().required(),
+  title: Joi.string().required(),
+  body: Joi.string().required(),
 });
 
 const schemaComments = Joi.object().keys({
-    postId: Joi.number().required(),
-    id: Joi.number().required(),
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    body: Joi.string().required()
-  });
+  postId: Joi.number().required(),
+  id: Joi.number().required(),
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  body: Joi.string().required(),
+});
 
 const ObjectCheck = {
-    "users": schemaUser,
-    "todos": schemaTodo,
-    "posts": schemaPosts,
-    "comments": schemaComments
-}
+  users: schemaUser,
+  todos: schemaTodo,
+  posts: schemaPosts,
+  comments: schemaComments,
+};
 
-exports.check = function(type, object){
-    return ObjectCheck[type].validate(object);
-}
+exports.check = function (type, object) {
+  return ObjectCheck[type].validate(object);
+};
 
 /** 
  * 

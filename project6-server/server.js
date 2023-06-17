@@ -4,6 +4,7 @@ const cors = require("cors");
 app.use(cors());
 const hostname = "jsonplaceholder.typicode.com";
 var DBPlaceholder = require("./DBPlaceholder");
+//var Check = require("./Check");
 //import Check from "./Check";
 //let DBPlaceholder = new DB();
 app.get("/", (req, res) => {
@@ -54,13 +55,32 @@ app.get("/:collection/:id/:moreCollection", (req, res) => {
 
 app.post("/:collection", (req, res) => {
   // res.status(400).send("bad request")
-  const { error } = Check.check(collection, req.body); // check body - how?
-  if (error) {
-    return res.status(400).send(error.details[0].message);
-  }
+  // const { error } = Check.check(collection, req.body); // check body - how?
+  // if (error) {
+  //   return res.status(400).send(error.details[0].message);
+  // }
+  console.log("line 62");
+  console.log(req.body);
+  const collection = req.params.collection;
+  DBPlaceholder.post(collection, req.body)
+    .then((result) => {
+      console.log(result); // Access the result array here
+      res.send(result);
+    })
+    .catch((error) => {
+      console.error(error); // Handle any errors here
+    });
 
+  //res.send(DBPlaceholder.post(collection, req.body));
+});
+
+app.put("/:collection/:id", (req, res) => {
+  //לא בטוחה שצריך לשלוח תז
+  // check body
+  // res.status(400).send("bad request")
+  const { error } = Check.check(collection, req.body);
   // const collection = req.params.collection;
-  // DBPlaceholder.post(collection,  req.body)
+  // DBPlaceholder.put(collection, req.body)
   //   .then((result) => {
   //     console.log(result); // Access the result array here
   //     res.send(result);
@@ -69,13 +89,6 @@ app.post("/:collection", (req, res) => {
   //     console.error(error); // Handle any errors here
   //   });
 
-  res.send(DBPlaceholder.post(collection, req.body));
-});
-
-app.put("/:collection/:id", (req, res) => {
-  // check body
-  // res.status(400).send("bad request")
-  const { error } = Check.check(collection, req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
@@ -90,11 +103,20 @@ app.put("/:collection/:id", (req, res) => {
 });
 
 app.delete("/:collection/:id", (req, res) => {
-  const flage = DBPlaceholder.delete(collection, req.params.id);
+  const flage = DBPlaceholder.deletee(collection, req.params.id);
+  // const collection = req.params.collection;
+  // DBPlaceholder.deletee(collection, req.params.id)
+  //   .then((result) => {
+  //     console.log(result); // Access the result array here
+  //     res.send(result);
+  //   })
+  //   .catch((error) => {
+  //     console.error(error); // Handle any errors here
+  //   });
   if (!flage) return res.status(404).send("Not Found");
   res.send("Delete");
 });
-
+app.listen(4000, () => console.log("listen"));
 // class Server {
 //   constructor() {
 //     this.db = new DB();

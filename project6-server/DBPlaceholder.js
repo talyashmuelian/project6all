@@ -86,92 +86,201 @@ exports.get = function (tableName, itemID = 0, moreTableName = "") {
 //   });
 // }
 exports.put = function (tableName, data) {
-  // Check if the updated member has a valid ID
-  if (!data.id) {
-    console.error("Updated member does not have a valid ID.");
-    return;
-  }
-
-  // Construct the SQL query
-  let sql = `UPDATE ${tableName} SET ? WHERE id = ?`;
-
-  // Check if the ID already exists in the table
-  let checkSql = `SELECT COUNT(*) AS count FROM ${tableName} WHERE id = ?`;
-  con.query(checkSql, data.id, function (err, result) {
-    if (err) throw err;
-
-    if (result[0].count === 0) {
-      console.log("No member with the specified ID exists.");
-    } else {
-      // Update the existing member in the table
-      con.query(sql, [data, data.id], function (err, result) {
-        if (err) throw err;
-        console.log("Member updated successfully.");
-        return true;
-      });
+  return new Promise((resolve, reject) => {
+    if (!data.id) {
+      reject(new Error("Updated member does not have a valid ID."));
+      return;
     }
+
+    let sql = `UPDATE ${tableName} SET ? WHERE id = ?`;
+    let checkSql = `SELECT COUNT(*) AS count FROM ${tableName} WHERE id = ?`;
+
+    console.log("line 30");
+    console.log(sql);
+
+    if (!tables.some((item) => sql.includes(item))) {
+      reject(new Error("Invalid table name"));
+      return;
+    }
+
+    con.query(checkSql, data.id, function (err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        if (result[0].count === 0) {
+          reject(new Error("No member with the specified ID exists."));
+        } else {
+          con.query(sql, [data, data.id], function (err, result) {
+            if (err) {
+              reject(err);
+            } else {
+              console.log("Member updated successfully.");
+              resolve(result);
+            }
+          });
+        }
+      }
+    });
   });
 };
-exports.post = function (tableName, data) {
-  //check if data has id
-  if (!data.id) {
-    console.log("there is no id");
-    return;
-  }
-  let sql = `INSERT INTO ${tableName} SET ?`;
-  // בדיקה האם המזהה כבר קיים בטבלה
-  let checkSql = `SELECT COUNT(*) AS count FROM ${tableName} WHERE id = ?`;
-  con.query(checkSql, data.id, function (err, result) {
-    if (err) throw err;
+// exports.put = function (tableName, data) {
+//   // Check if the updated member has a valid ID
+//   if (!data.id) {
+//     console.error("Updated member does not have a valid ID.");
+//     return;
+//   }
 
-    if (result[0].count > 0) {
-      console.log("A member with the same ID already exists.");
-    } else {
-      con.query(sql, data, function (err, result) {
-        if (err) throw err;
-        console.log("New member inserted successfully.");
-      });
-    }
-  });
-};
-exports.deletee = function (tableName, itemID) {
-  // Check if a valid ID is provided
-  if (!itemID) {
-    console.log("No valid ID provided.");
-    return;
-  }
+//   // Construct the SQL query
+//   let sql = `UPDATE ${tableName} SET ? WHERE id = ?`;
 
-  // Construct the SQL query
-  let sql = `DELETE FROM ${tableName} WHERE id = ?`;
+//   // Check if the ID already exists in the table
+//   let checkSql = `SELECT COUNT(*) AS count FROM ${tableName} WHERE id = ?`;
+//   con.query(checkSql, data.id, function (err, result) {
+//     if (err) throw err;
 
-  // Check if a member with the specified ID exists
-  let checkSql = `SELECT COUNT(*) AS count FROM ${tableName} WHERE id = ?`;
-  con.query(checkSql, itemID, function (err, result) {
-    if (err) throw err;
-
-    if (result[0].count === 0) {
-      console.log("No member with the specified ID exists.");
-    } else {
-      // Delete the member from the table
-      con.query(sql, itemID, function (err, result) {
-        if (err) throw err;
-        console.log("Member deleted successfully.");
-      });
-    }
-  });
-};
-
-// let data = {
-//   id: 11,
-//   name: "talyaupdate",
-//   username: "talya",
-//   email: "talya@karina.biz",
-//   phone: "024-648-3800",
-//   website: "talya",
-//   rank: "user",
-//   api_key: "zLCyhlxcVRCisJNX9hUt",
+//     if (result[0].count === 0) {
+//       console.log("No member with the specified ID exists.");
+//     } else {
+//       // Update the existing member in the table
+//       con.query(sql, [data, data.id], function (err, result) {
+//         if (err) throw err;
+//         console.log("Member updated successfully.");
+//         return true;
+//       });
+//     }
+//   });
 // };
-//put("users", data);
+exports.post = function (tableName, data) {
+  return new Promise((resolve, reject) => {
+    console.log(data);
+    if (!data.id) {
+      reject(new Error("There is no id"));
+      return;
+    }
+
+    let sql = `INSERT INTO ${tableName} SET ?`;
+    let checkSql = `SELECT COUNT(*) AS count FROM ${tableName} WHERE id = ?`;
+
+    if (!tables.some((item) => sql.includes(item))) {
+      reject(new Error("Invalid table name"));
+      return;
+    }
+
+    con.query(checkSql, data.id, function (err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        if (result[0].count > 0) {
+          reject(new Error("A member with the same ID already exists."));
+        } else {
+          con.query(sql, data, function (err, result) {
+            if (err) {
+              reject(err);
+            } else {
+              console.log("New member inserted successfully.");
+              resolve(result);
+            }
+          });
+        }
+      }
+    });
+  });
+};
+// exports.post = function (tableName, data) {
+//   //check if data has id
+//   if (!data.id) {
+//     console.log("there is no id");
+//     return;
+//   }
+//   let sql = `INSERT INTO ${tableName} SET ?`;
+//   // בדיקה האם המזהה כבר קיים בטבלה
+//   let checkSql = `SELECT COUNT(*) AS count FROM ${tableName} WHERE id = ?`;
+//   con.query(checkSql, data.id, function (err, result) {
+//     if (err) throw err;
+
+//     if (result[0].count > 0) {
+//       console.log("A member with the same ID already exists.");
+//     } else {
+//       con.query(sql, data, function (err, result) {
+//         if (err) throw err;
+//         console.log("New member inserted successfully.");
+//       });
+//     }
+//   });
+// };
+exports.deletee = function (tableName, itemID) {
+  return new Promise((resolve, reject) => {
+    if (!itemID) {
+      reject(new Error("No valid ID provided."));
+      return;
+    }
+
+    let sql = `DELETE FROM ${tableName} WHERE id = ?`;
+    let checkSql = `SELECT COUNT(*) AS count FROM ${tableName} WHERE id = ?`;
+
+    if (!tables.some((item) => sql.includes(item))) {
+      reject(new Error("Invalid table name"));
+      return;
+    }
+
+    con.query(checkSql, itemID, function (err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        if (result[0].count === 0) {
+          reject(new Error("No member with the specified ID exists."));
+        } else {
+          con.query(sql, itemID, function (err, result) {
+            if (err) {
+              reject(err);
+            } else {
+              console.log("Member deleted successfully.");
+              resolve(result);
+            }
+          });
+        }
+      }
+    });
+  });
+};
+// exports.deletee = function (tableName, itemID) {
+//   // Check if a valid ID is provided
+//   if (!itemID) {
+//     console.log("No valid ID provided.");
+//     return;
+//   }
+
+//   // Construct the SQL query
+//   let sql = `DELETE FROM ${tableName} WHERE id = ?`;
+
+//   // Check if a member with the specified ID exists
+//   let checkSql = `SELECT COUNT(*) AS count FROM ${tableName} WHERE id = ?`;
+//   con.query(checkSql, itemID, function (err, result) {
+//     if (err) throw err;
+
+//     if (result[0].count === 0) {
+//       console.log("No member with the specified ID exists.");
+//     } else {
+//       // Delete the member from the table
+//       con.query(sql, itemID, function (err, result) {
+//         if (err) throw err;
+//         console.log("Member deleted successfully.");
+//       });
+//     }
+//   });
+// };
+
+let data = {
+  id: 11,
+  name: "talyaupdate",
+  username: "talya",
+  email: "talya@karina.biz",
+  phone: "024-648-3800",
+  website: "talya",
+  rank: "user",
+  api_key: "zLCyhlxcVRCisJNX9hUt",
+};
+//post("users", data);
 //deletee("users", 11);
 //get("users");
 
@@ -232,5 +341,5 @@ exports.deletee = function (tableName, itemID) {
 //   if (!flage) return res.status(404).send("Not Found");
 //   res.send("Delete");
 // });
-app.listen(4000, () => console.log("listen"));
+
 //export default DBPlaceholder;
