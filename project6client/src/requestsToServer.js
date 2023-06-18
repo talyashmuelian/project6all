@@ -9,6 +9,7 @@ export async function requestsGet(path) {
 }
 
 export async function requestsPost(path, object) {
+  console.log(JSON.stringify(object));
   const response = await fetch(hostname + path, {
     method: "POST",
     body: JSON.stringify(object),

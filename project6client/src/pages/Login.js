@@ -1,9 +1,7 @@
 import { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./Login.css";
-import {
-  requestsGet
-} from "../requestsToServer.js";
+import { requestsGet } from "../requestsToServer.js";
 
 const Login = () => {
   const [inputs, setInputs] = useState({});
@@ -16,21 +14,23 @@ const Login = () => {
 
   async function fetchData() {
     try {
-      const data = await requestsGet(`/users`);
-      // const response = await fetch(
-      //   "https://jsonplaceholder.typicode.com/users"
-      // );
-      // const data = await response.json();
+      const data = await requestsGet(`/passwords?username=${inputs.username}`);
+
       console.log(data);
-      let latArr;
       let exist = false;
-      for (let i of data) {
-        latArr = i["address"]["geo"].lat.split(".");
-        if (
-          i["username"] === inputs.username &&
-          latArr[1] === inputs.password
-        ) {
-          var json = JSON.stringify(i);
+      if (data[0].password === inputs.password) {
+        //for (let i of data) {
+        // if (
+        //   i["username"] === inputs.username &&
+        //   i["password"] === inputs.password
+        // )
+        {
+          const dataUser = await requestsGet(
+            `/users?username=${inputs.username}`
+          );
+          console.log(dataUser);
+
+          var json = JSON.stringify(dataUser[0]);
           localStorage.setItem("currentUser", json);
           exist = true;
           window.location.href = "/Users";

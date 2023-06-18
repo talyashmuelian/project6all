@@ -3,6 +3,7 @@ import "./Users.css";
 
 const Users = () => {
   var user = JSON.parse(localStorage.getItem("currentUser"));
+  console.log("line6 " + user.id);
   return (
     <div className="users-container">
       <h1 className="user-name">{user.name}</h1>

@@ -13,23 +13,37 @@ con.connect(async function (err) {
   console.log("Connected!");
 });
 
-let tables = ["users", "todos", "posts", "comments"];
+let tables = ["users", "todos", "posts", "comments", "passwords"];
 
-exports.get = function (tableName, itemID = 0, moreTableName = "") {
+exports.get = function (tableName, itemID = {}, moreTableName = "") {
   return new Promise((resolve, reject) => {
     var sql;
-    if (itemID == 0) {
+    console.log("line 21");
+    console.log(itemID);
+    if (Object.keys(itemID).length === 0) {
       sql = `SELECT * FROM ${tableName}`;
     } else {
       if (moreTableName == "") {
-        sql = `SELECT * FROM ${tableName} WHERE id = ${itemID}`;
+        let q = "";
+        Object.entries(itemID).forEach(([key, value]) => {
+          q += `${key} = "${value}"`;
+          //console.log(`Key: ${key}, Value: ${value}`);
+        });
+
+        sql = `SELECT * FROM ${tableName} WHERE ${q}`;
+        //sql = `SELECT * FROM ${tableName} WHERE id = ${itemID}`;
       } else {
         let col = tableName.slice(0, -1) + "Id";
-        sql = `SELECT * FROM ${moreTableName} WHERE ${col} = ${itemID}`;
+        Object.entries(itemID).forEach(([key, value]) => {
+          //q += `${key} = "${value}"`;
+          console.log(`Key: ${key}, Value: ${value}`);
+        });
+        console.log("line 37 " + itemID);
+        sql = `SELECT * FROM ${moreTableName} WHERE ${col} = ${itemID.id}`;
       }
     }
 
-    console.log("line 30");
+    console.log("line 42");
     console.log(sql);
 
     if (!tables.some((item) => sql.includes(item))) {

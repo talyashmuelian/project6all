@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
 });
 app.get("/:collection", (req, res) => {
   const collection = req.params.collection;
-  DBPlaceholder.get(collection)
+  DBPlaceholder.get(collection, req.query)
     .then((result) => {
       console.log(result); // Access the result array here
       res.send(result);
@@ -28,7 +28,7 @@ app.get("/:collection", (req, res) => {
 
 app.get("/:collection/:id", (req, res) => {
   const collection = req.params.collection;
-  DBPlaceholder.get(collection, req.params.id)
+  DBPlaceholder.get(collection, { id: req.params.id })
     .then((result) => {
       console.log(result); // Access the result array here
       res.send(result);
@@ -43,7 +43,12 @@ app.get("/:collection/:id", (req, res) => {
 });
 app.get("/:collection/:id/:moreCollection", (req, res) => {
   const collection = req.params.collection;
-  DBPlaceholder.get(collection, req.params.id, req.params.moreCollection)
+
+  DBPlaceholder.get(
+    collection,
+    { id: req.params.id },
+    req.params.moreCollection
+  )
     .then((result) => {
       console.log(result); // Access the result array here
       res.send(result);

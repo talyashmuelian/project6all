@@ -33,6 +33,7 @@ const Select = ({ onSort }) => {
 
 const Todos = () => {
   const [todos, setTodos] = useState([]);
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -93,10 +94,37 @@ const Todos = () => {
     setTodos(sortedTodos);
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    var user = JSON.parse(localStorage.getItem("currentUser"));
+    let newTodo = {
+      userId: user.id,
+      id: 1000,
+      title: title,
+      completed: 0,
+    };
+    requestsPost("/todos", newTodo);
+  };
+
   return (
     <div className="todos-container">
       <h1 className="todos-header">Todos</h1>
       <Select onSort={handleSortTodos} />
+      <form onSubmit={handleSubmit}>
+        <h4>add todo</h4>
+        <div className="form-group">
+          <input
+            type="text"
+            id="todo"
+            name="todo"
+            value={title || ""}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+
+        <button type="submit">add</button>
+      </form>
+
       <div className="background">
         <div className="todos-list">
           {todos.map((todo) => (
