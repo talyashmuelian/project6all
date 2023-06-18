@@ -2,8 +2,9 @@ const express = require("express");
 app = express();
 const cors = require("cors");
 app.use(cors());
-const hostname = "jsonplaceholder.typicode.com";
-var DBPlaceholder = require("./DBPlaceholder");
+app.use(express.json());
+//const hostname = "jsonplaceholder.typicode.com";
+//var DBPlaceholder = require("./DBPlaceholder");
 //var Check = require("./Check");
 //import Check from "./Check";
 //let DBPlaceholder = new DB();
@@ -64,6 +65,7 @@ app.post("/:collection", (req, res) => {
   // if (error) {
   //   return res.status(400).send(error.details[0].message);
   // }
+  debugger;
   console.log("line 62");
   console.log(req.body);
   const collection = req.params.collection;

@@ -1,4 +1,4 @@
-import Joi from "joi";
+//import Joi from "joi";
 
 const Joi = require("joi");
 
@@ -18,7 +18,7 @@ const schemaTodo = Joi.object().keys({
   userId: Joi.number().required(),
   id: Joi.number().required(),
   title: Joi.string().required(),
-  completed: Joi.boolean().required(),
+  completed: Joi.number().valid(0, 1).required()
 });
 
 const schemaPosts = Joi.object().keys({
@@ -43,9 +43,17 @@ const ObjectCheck = {
   comments: schemaComments,
 };
 
-exports.check = function (type, object) {
-  return ObjectCheck[type].validate(object);
+//exports.
+check = function (type, object) {
+  const schema = ObjectCheck[type];
+  console.log(schema);
+  return schema.validate(object);
 };
+const {error} = check("todos", { userId: 3, id: 1000, title: 'pruject6', completed: 0 });
+//console.log(error.message);
+if (error) {
+  console.log(error.details[0].message);
+}
 
 /** 
  * 
