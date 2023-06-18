@@ -14,7 +14,7 @@ export async function requestsPost(path, object) {
     method: "POST",
     body: JSON.stringify(object),
     headers: {
-      "Content-type": "application/json; charset=UTF-8",
+      "Content-type": "application/json",
     },
   });
   return await response.json();

@@ -4,8 +4,8 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 //const hostname = "jsonplaceholder.typicode.com";
-//var DBPlaceholder = require("./DBPlaceholder");
-//var Check = require("./Check");
+var DBPlaceholder = require("./DBPlaceholder");
+var Check = require("./Check");
 //import Check from "./Check";
 //let DBPlaceholder = new DB();
 app.get("/", (req, res) => {
@@ -60,15 +60,16 @@ app.get("/:collection/:id/:moreCollection", (req, res) => {
 });
 
 app.post("/:collection", (req, res) => {
-  // res.status(400).send("bad request")
-  // const { error } = Check.check(collection, req.body); // check body - how?
-  // if (error) {
-  //   return res.status(400).send(error.details[0].message);
-  // }
-  debugger;
+  const collection = req.params.collection;
+  res.status(400).send("bad request");
+  const { error } = Check.check(collection, req.body); // check body - how?
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
   console.log("line 62");
   console.log(req.body);
-  const collection = req.params.collection;
+
   DBPlaceholder.post(collection, req.body)
     .then((result) => {
       console.log(result); // Access the result array here
@@ -83,18 +84,19 @@ app.post("/:collection", (req, res) => {
 
 app.put("/:collection/:id", (req, res) => {
   //לא בטוחה שצריך לשלוח תז
+  const collection = req.params.collection;
   // check body
   // res.status(400).send("bad request")
   const { error } = Check.check(collection, req.body);
-  // const collection = req.params.collection;
-  // DBPlaceholder.put(collection, req.body)
-  //   .then((result) => {
-  //     console.log(result); // Access the result array here
-  //     res.send(result);
-  //   })
-  //   .catch((error) => {
-  //     console.error(error); // Handle any errors here
-  //   });
+
+  DBPlaceholder.put(collection, req.body)
+    .then((result) => {
+      console.log(result); // Access the result array here
+      res.send(result);
+    })
+    .catch((error) => {
+      console.error(error); // Handle any errors here
+    });
 
   if (error) {
     return res.status(400).send(error.details[0].message);
@@ -103,10 +105,10 @@ app.put("/:collection/:id", (req, res) => {
   if (!DBPlaceholder.get(collection, req.params.id)) {
     return res.status(404).send("Not Found");
   }
-  if (DBPlaceholder.put(collection, req.body)) {
-    return res.send("Added successfully");
-  }
-  return res.status().send(); //??
+  // if (DBPlaceholder.put(collection, req.body)) {
+  //   return res.send("Added successfully");
+  // }
+  // return res.status().send(); //??
 });
 
 app.delete("/:collection/:id", (req, res) => {

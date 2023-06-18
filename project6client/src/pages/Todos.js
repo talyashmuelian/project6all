@@ -33,6 +33,7 @@ const Select = ({ onSort }) => {
 
 const Todos = () => {
   const [todos, setTodos] = useState([]);
+  const [addFlag, setAddFlag] = useState(false);
   const [title, setTitle] = useState("");
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const Todos = () => {
     }
 
     fetchData();
-  }, []);
+  }, [addFlag]);
 
   const handleToggleTodo = (id) => {
     let newObj;
@@ -99,10 +100,11 @@ const Todos = () => {
     var user = JSON.parse(localStorage.getItem("currentUser"));
     let newTodo = {
       userId: user.id,
-      id: 1000,
+      id: 1006,
       title: title,
       completed: 0,
     };
+    setAddFlag(true);
     requestsPost("/todos", newTodo);
   };
 
