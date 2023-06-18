@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ReactDOM from "react-dom/client";
+import { Link } from "react-router-dom";
 import "./Login.css";
 import { requestsGet } from "../requestsToServer.js";
 
@@ -75,6 +76,7 @@ const Login = () => {
           />
         </div>
         <button type="submit">Login</button>
+        <div><Link to={`/register`}>Sign In</Link></div>
       </form>
     </div>
   );

@@ -164,6 +164,7 @@ exports.put = function (tableName, data) {
 //     }
 //   });
 // };
+
 exports.post = function (tableName, data) {
   return new Promise((resolve, reject) => {
     console.log(data);
@@ -200,6 +201,38 @@ exports.post = function (tableName, data) {
     });
   });
 };
+
+/**exports.post = function (tableName, data) {
+  return new Promise((resolve, reject) => {
+    console.log(data);
+    let sql = `INSERT INTO ${tableName} SET ?`;
+    let checkSql = `SELECT MAX(id) AS maxId FROM ${tableName}`;
+
+    if (!tables.some((item) => sql.includes(item))) {
+      reject(new Error("Invalid table name"));
+      return;
+    }
+
+    con.query(checkSql, function (err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        const nextId = result[0].maxId + 1;
+        data.id = nextId;
+
+        con.query(sql, data, function (err, result) {
+          if (err) {
+            reject(err);
+          } else {
+            console.log("New member inserted successfully.");
+            resolve(result);
+          }
+        });
+      }
+    });
+  });
+};*/
+
 // exports.post = function (tableName, data) {
 //   //check if data has id
 //   if (!data.id) {

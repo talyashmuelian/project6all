@@ -1,13 +1,14 @@
 import { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./Registration.css";
+import { Link } from "react-router-dom";
+import { requestsPost } from "../requestsToServer";
 
 const Registration = () => {
   const [user, setUser] = useState({
-    id: "",
-    name: "",
+    id: 0,
     username: "",
-    email: ""
+    password: ""
   });
 
   const handleChange = (event) => {
@@ -16,33 +17,39 @@ const Registration = () => {
     setUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
 
+  
+  async function fetchData() {
+    try {
+      const data = await requestsPost(`/passwords`, user);
+
+      console.log(data);
+
+      window.location.href = "/Login";
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
   const handleSubmit = (event) => {
+    debugger;
     event.preventDefault();
     console.log(user);
     // Perform registration logic or API request here
     // Reset the form fields
     setUser({
       id: "",
-      name: "",
       username: "",
-      email: ""
+      password: ""
     });
+    fetchData();
   };
 
   return (
     <div className="registration-container">
       <form onSubmit={handleSubmit}>
         <h1>User Registration</h1>
-        <div className="form-group">
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={user.name || ""}
-            onChange={handleChange}
-          />
-        </div>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input
@@ -54,16 +61,17 @@ const Registration = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="email">Email:</label>
+          <label htmlFor="password">Password:</label>
           <input
-            type="email"
-            id="email"
-            name="email"
-            value={user.email || ""}
+            type="password"
+            id="password"
+            name="password"
+            value={user.password || ""}
             onChange={handleChange}
           />
         </div>
         <button type="submit">Register</button>
+        <div><Link to={`/Login`}>Login</Link></div>
       </form>
     </div>
   );

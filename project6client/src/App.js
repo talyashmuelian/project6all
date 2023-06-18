@@ -8,6 +8,7 @@ import Todos from "./pages/Todos";
 import Posts from "./pages/Posts";
 import Login from "./pages/Login";
 import Info from "./pages/Info";
+import Registration from "./pages/SignIn"
 // import Photos from "./pages/Photos";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/Login" element={<Login />} />
         <Route path="/" element={<Navigate to="/Login" />} />
+        <Route path="/register" element={<Registration />}/>
         <Route path="Users" element={<Users />}>
           <Route path=":id/Posts" element={<Posts />} />
           <Route path=":id/Todos" element={<Todos />} />
