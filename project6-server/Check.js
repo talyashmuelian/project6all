@@ -36,16 +36,24 @@ const schemaComments = Joi.object().keys({
   body: Joi.string().required(),
 });
 
+const schemaPasswords = Joi.object().keys({
+  id: Joi.number().required(),
+  username: Joi.string().required(),
+  passwords: Joi.string().required(),
+});
+
 const ObjectCheck = {
   users: schemaUser,
   todos: schemaTodo,
   posts: schemaPosts,
   comments: schemaComments,
+  passwords: schemaPasswords,
 };
 
 exports.check = function (type, object) {
   const schema = ObjectCheck[type];
-  console.log(schema);
+  console.log("in check");
+  console.log(type);
   return schema.validate(object);
 };
 // const { error } = check("todos", {

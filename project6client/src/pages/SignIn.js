@@ -8,7 +8,7 @@ const Registration = () => {
   const [user, setUser] = useState({
     id: 0,
     username: "",
-    password: ""
+    password: "",
   });
 
   const handleChange = (event) => {
@@ -17,33 +17,41 @@ const Registration = () => {
     setUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
 
-  
   async function fetchData() {
     try {
-      const data = await requestsPost(`/passwords`, user);
-
-      console.log(data);
+      //const data = await
+      requestsPost(`/passwords`, user);
+      setUser({
+        id: "",
+        username: "",
+        password: "",
+      });
+      //console.log(data);
 
       window.location.href = "/Login";
-
     } catch (error) {
       console.error(error);
     }
   }
 
-
   const handleSubmit = (event) => {
-    debugger;
+    //debugger;
     event.preventDefault();
+    console.log("line36");
     console.log(user);
-    // Perform registration logic or API request here
-    // Reset the form fields
+    setUser({ id: 0, username: user.username, password: user.password });
+    //fetchData();
+    requestsPost(`/passwords`, user);
     setUser({
       id: "",
       username: "",
-      password: ""
+      password: "",
     });
-    fetchData();
+    //console.log(data);
+
+    window.location.href = "/Login";
+    // Perform registration logic or API request here
+    // Reset the form fields
   };
 
   return (
@@ -71,20 +79,15 @@ const Registration = () => {
           />
         </div>
         <button type="submit">Register</button>
-        <div><Link to={`/Login`}>Login</Link></div>
+        <div>
+          <Link to={`/Login`}>Login</Link>
+        </div>
       </form>
     </div>
   );
 };
 
 export default Registration;
-
-
-
-
-
-
-
 
 /**import React, { useState } from "react";
 import './Registration.css';

@@ -165,44 +165,44 @@ exports.put = function (tableName, data) {
 //   });
 // };
 
+// exports.post = function (tableName, data) {
+//   return new Promise((resolve, reject) => {
+//     console.log(data);
+//     if (!data.id) {
+//       reject(new Error("There is no id"));
+//       return;
+//     }
+
+//     let sql = `INSERT INTO ${tableName} SET ?`;
+//     let checkSql = `SELECT COUNT(*) AS count FROM ${tableName} WHERE id = ?`;
+
+//     if (!tables.some((item) => sql.includes(item))) {
+//       reject(new Error("Invalid table name"));
+//       return;
+//     }
+
+//     con.query(checkSql, data.id, function (err, result) {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         if (result[0].count > 0) {
+//           reject(new Error("A member with the same ID already exists."));
+//         } else {
+//           con.query(sql, data, function (err, result) {
+//             if (err) {
+//               reject(err);
+//             } else {
+//               console.log("New member inserted successfully.");
+//               resolve(result);
+//             }
+//           });
+//         }
+//       }
+//     });
+//   });
+// };
+
 exports.post = function (tableName, data) {
-  return new Promise((resolve, reject) => {
-    console.log(data);
-    if (!data.id) {
-      reject(new Error("There is no id"));
-      return;
-    }
-
-    let sql = `INSERT INTO ${tableName} SET ?`;
-    let checkSql = `SELECT COUNT(*) AS count FROM ${tableName} WHERE id = ?`;
-
-    if (!tables.some((item) => sql.includes(item))) {
-      reject(new Error("Invalid table name"));
-      return;
-    }
-
-    con.query(checkSql, data.id, function (err, result) {
-      if (err) {
-        reject(err);
-      } else {
-        if (result[0].count > 0) {
-          reject(new Error("A member with the same ID already exists."));
-        } else {
-          con.query(sql, data, function (err, result) {
-            if (err) {
-              reject(err);
-            } else {
-              console.log("New member inserted successfully.");
-              resolve(result);
-            }
-          });
-        }
-      }
-    });
-  });
-};
-
-/**exports.post = function (tableName, data) {
   return new Promise((resolve, reject) => {
     console.log(data);
     let sql = `INSERT INTO ${tableName} SET ?`;
@@ -231,7 +231,7 @@ exports.post = function (tableName, data) {
       }
     });
   });
-};*/
+};
 
 // exports.post = function (tableName, data) {
 //   //check if data has id
@@ -327,6 +327,12 @@ let data = {
   rank: "user",
   api_key: "zLCyhlxcVRCisJNX9hUt",
 };
+// let newUser = {
+//   id: 0,
+//   username: "talya1",
+//   password: "11",
+// };
+// post("passwords", newUser);
 //post("users", data);
 //deletee("users", 11);
 //get("users");

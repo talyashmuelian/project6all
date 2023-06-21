@@ -61,11 +61,11 @@ app.get("/:collection/:id/:moreCollection", (req, res) => {
 
 app.post("/:collection", (req, res) => {
   const collection = req.params.collection;
-  res.status(400).send("bad request");
-  const { error } = Check.check(collection, req.body); // check body - how?
-  if (error) {
-    return res.status(400).send(error.details[0].message);
-  }
+  // const { error } = Check.check(collection, req.body);
+
+  // if (error) {
+  //   return res.status(400).send(error.details[0].message);
+  // }
 
   console.log("line 62");
   console.log(req.body);
@@ -77,10 +77,32 @@ app.post("/:collection", (req, res) => {
     })
     .catch((error) => {
       console.error(error); // Handle any errors here
+      res.status(500).send("Internal Server Error");
     });
-
-  //res.send(DBPlaceholder.post(collection, req.body));
 });
+
+// app.post("/:collection", (req, res) => {
+//   const collection = req.params.collection;
+//   res.status(400).send("bad request");
+//   const { error } = Check.check(collection, req.body); // check body - how?
+//   if (error) {
+//     return res.status(400).send(error.details[0].message);
+//   }
+
+//   console.log("line 62");
+//   console.log(req.body);
+
+//   DBPlaceholder.post(collection, req.body)
+//     .then((result) => {
+//       console.log(result); // Access the result array here
+//       res.send(result);
+//     })
+//     .catch((error) => {
+//       console.error(error); // Handle any errors here
+//     });
+
+//   //res.send(DBPlaceholder.post(collection, req.body));
+// });
 
 app.put("/:collection/:id", (req, res) => {
   //לא בטוחה שצריך לשלוח תז
