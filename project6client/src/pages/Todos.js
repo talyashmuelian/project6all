@@ -105,32 +105,7 @@ const Todos = () => {
       completed: 0,
     };
     requestsPost("/todos", newTodo);
-    let newPost = {
-      userId: user.id,
-      id: 0,
-      title: title,
-      body: "body",
-    };
-    requestsPost("/posts", newPost);
 
-    // let newInUser = {
-    //   id: 0,
-    //   name: "talyaupdate",
-    //   username: "talya",
-    //   email: "talya@karina.biz",
-    //   phone: "024-648-3800",
-    //   website: "talya",
-    //   rank: "user",
-    //   api_key: "zLCyhlxcVRCisJNX9hUt",
-    // };
-    // requestsPost("/users", newInUser);
-
-    // let newUser = {
-    //   id: 0,
-    //   username: "talya2",
-    //   password: "2",
-    // };
-    // requestsPost("/passwords", newUser);
 
     setAddFlag(true); //עדיין צריך לרפרש
   };
@@ -179,3 +154,30 @@ const Todos = () => {
 };
 
 export default Todos;
+
+    // let newPost = {
+    //   userId: user.id,
+    //   id: 0,
+    //   title: title,
+    //   body: "body",
+    // };
+    // requestsPost("/posts", newPost);
+
+    // let newInUser = {
+    //   id: 0,
+    //   name: "talyaupdate",
+    //   username: "talya",
+    //   email: "talya@karina.biz",
+    //   phone: "024-648-3800",
+    //   website: "talya",
+    //   rank: "user",
+    //   api_key: "zLCyhlxcVRCisJNX9hUt",
+    // };
+    // requestsPost("/users", newInUser);
+
+    // let newUser = {
+    //   id: 0,
+    //   username: "talya2",
+    //   password: "2",
+    // };
+    // requestsPost("/passwords", newUser);
