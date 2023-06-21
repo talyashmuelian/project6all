@@ -35,6 +35,9 @@ const Todos = () => {
   const [todos, setTodos] = useState([]);
   const [addFlag, setAddFlag] = useState(false);
   const [title, setTitle] = useState("");
+  const [updateId, setUpdateId] = useState(null); // New state variable
+  const [updateTitle, setUpdateTitle] = useState("");
+  const [updateCompleted, setUpdateCompleted] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -106,8 +109,54 @@ const Todos = () => {
     };
     requestsPost("/todos", newTodo);
 
-
     setAddFlag(true); //עדיין צריך לרפרש
+  };
+
+  // const handleUpdate = (id) => {
+  //   let updatedTodo;
+  //   const updatedTodos = todos.map((todo) => {
+  //     if (todo.id === id) {
+  //       updatedTodo = {
+  //         ...todo,
+  //         title: "updated is work",
+  //         completed: 1,
+  //       };
+  //       requestsPut(`/todos/${id}`, updatedTodo);
+  //       return updatedTodo;
+  //     }
+  //     return todo;
+  //   });
+
+  //   setTodos(updatedTodos);
+  // };
+
+  const handleUpdate = (id) => {
+    setUpdateId(id); // Set the ID of the todo to be updated
+    const todoToUpdate = todos.find((todo) => todo.id === id);
+    setUpdateTitle(todoToUpdate.title);
+    setUpdateCompleted(todoToUpdate.completed);
+  };
+  const handleUpdateSubmit = (event) => {
+    event.preventDefault();
+    const updatedTodo = {
+      ...todos.find((todo) => todo.id === updateId),
+      title: updateTitle,
+      completed: updateCompleted,
+    };
+    requestsPut(`/todos/${updateId}`, updatedTodo);
+
+    const updatedTodos = todos.map((todo) =>
+      todo.id === updateId ? updatedTodo : todo
+    );
+    setTodos(updatedTodos);
+    setUpdateId(null); // Reset the update ID
+  };
+
+  const handleDelete = (id) => {
+    requestsDelete(`/todos/${id}`);
+
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
   };
 
   return (
@@ -144,7 +193,30 @@ const Todos = () => {
                   onChange={() => handleToggleTodo(todo.id)}
                 />
                 <span className="todo-checkmark"></span>
+                <button onClick={() => handleUpdate(todo.id)}>update</button>
+                <button onClick={() => handleDelete(todo.id)}>
+                  delete
+                </button>{" "}
+                {/* Added delete functionality */}
               </label>
+              {updateId === todo.id && (
+                <form onSubmit={handleUpdateSubmit}>
+                  <input
+                    type="text"
+                    value={updateTitle}
+                    onChange={(e) => setUpdateTitle(e.target.value)}
+                  />
+                  <label>
+                    Completed:
+                    <input
+                      type="checkbox"
+                      checked={updateCompleted}
+                      onChange={(e) => setUpdateCompleted(e.target.checked)}
+                    />
+                  </label>
+                  <button type="submit">Save</button>
+                </form>
+              )}
             </div>
           ))}
         </div>
@@ -155,29 +227,29 @@ const Todos = () => {
 
 export default Todos;
 
-    // let newPost = {
-    //   userId: user.id,
-    //   id: 0,
-    //   title: title,
-    //   body: "body",
-    // };
-    // requestsPost("/posts", newPost);
+// let newPost = {
+//   userId: user.id,
+//   id: 0,
+//   title: title,
+//   body: "body",
+// };
+// requestsPost("/posts", newPost);
 
-    // let newInUser = {
-    //   id: 0,
-    //   name: "talyaupdate",
-    //   username: "talya",
-    //   email: "talya@karina.biz",
-    //   phone: "024-648-3800",
-    //   website: "talya",
-    //   rank: "user",
-    //   api_key: "zLCyhlxcVRCisJNX9hUt",
-    // };
-    // requestsPost("/users", newInUser);
+// let newInUser = {
+//   id: 0,
+//   name: "talyaupdate",
+//   username: "talya",
+//   email: "talya@karina.biz",
+//   phone: "024-648-3800",
+//   website: "talya",
+//   rank: "user",
+//   api_key: "zLCyhlxcVRCisJNX9hUt",
+// };
+// requestsPost("/users", newInUser);
 
-    // let newUser = {
-    //   id: 0,
-    //   username: "talya2",
-    //   password: "2",
-    // };
-    // requestsPost("/passwords", newUser);
+// let newUser = {
+//   id: 0,
+//   username: "talya2",
+//   password: "2",
+// };
+// requestsPost("/passwords", newUser);

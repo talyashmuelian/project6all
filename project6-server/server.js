@@ -134,17 +134,17 @@ app.put("/:collection/:id", (req, res) => {
 });
 
 app.delete("/:collection/:id", (req, res) => {
-  const flage = DBPlaceholder.deletee(collection, req.params.id);
-  // const collection = req.params.collection;
-  // DBPlaceholder.deletee(collection, req.params.id)
-  //   .then((result) => {
-  //     console.log(result); // Access the result array here
-  //     res.send(result);
-  //   })
-  //   .catch((error) => {
-  //     console.error(error); // Handle any errors here
-  //   });
-  if (!flage) return res.status(404).send("Not Found");
+  //const flage = DBPlaceholder.deletee(collection, req.params.id);
+  const collection = req.params.collection;
+  DBPlaceholder.deletee(collection, req.params.id)
+    .then((result) => {
+      console.log(result); // Access the result array here
+      res.send(result);
+    })
+    .catch((error) => {
+      console.error(error); // Handle any errors here
+    });
+  //if (!flage) return res.status(404).send("Not Found");
   res.send("Delete");
 });
 app.listen(4000, () => console.log("listen"));
