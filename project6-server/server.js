@@ -20,6 +20,7 @@ app.get("/:collection", (req, res) => {
     })
     .catch((error) => {
       console.error(error); // Handle any errors here
+      return res.send("Error");
     });
   // let result = DBPlaceholder.get(collection);
   // console.log("line 13");
@@ -35,7 +36,8 @@ app.get("/:collection/:id", (req, res) => {
       res.send(result);
     })
     .catch((error) => {
-      console.error(error); // Handle any errors here
+      //console.error(error); // Handle any errors here
+      return res.send("Error");
     });
 
   // const jsonObject = DBPlaceholder.getOne(collection, req.params.id);
@@ -55,7 +57,8 @@ app.get("/:collection/:id/:moreCollection", (req, res) => {
       res.send(result);
     })
     .catch((error) => {
-      console.error(error); // Handle any errors here
+      //console.error(error); // Handle any errors here
+      return res.send("Error");
     });
 });
 
@@ -77,7 +80,7 @@ app.post("/:collection", (req, res) => {
     })
     .catch((error) => {
       console.error(error); // Handle any errors here
-      res.status(500).send("Internal Server Error");
+      return res.send("Internal Server Error"); //.status(500)
     });
 });
 
@@ -109,7 +112,7 @@ app.put("/:collection/:id", (req, res) => {
   const collection = req.params.collection;
   // check body
   // res.status(400).send("bad request")
-  const { error } = Check.check(collection, req.body);
+  //const { error } = Check.check(collection, req.body);
 
   DBPlaceholder.put(collection, req.body)
     .then((result) => {
@@ -121,7 +124,7 @@ app.put("/:collection/:id", (req, res) => {
     });
 
   if (error) {
-    return res.status(400).send(error.details[0].message);
+    return res.send(error.details[0].message); //.status(400)
   }
 
   if (!DBPlaceholder.get(collection, req.params.id)) {
@@ -143,6 +146,7 @@ app.delete("/:collection/:id", (req, res) => {
     })
     .catch((error) => {
       console.error(error); // Handle any errors here
+      return res.send("Internal Server Error");
     });
   //if (!flage) return res.status(404).send("Not Found");
   res.send("Delete");

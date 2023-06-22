@@ -11,7 +11,9 @@ const Info = () => {
   const [user, setUser] = useState(null);
   const [editDiv, setEditDiv] = useState(null);
   const [inputs, setInputs] = useState({});
-  const [visibilityEdit, setVisibilityEdit] = useState({visibility: 'hidden'})// visible
+  const [visibilityEdit, setVisibilityEdit] = useState({
+    visibility: "hidden",
+  }); // visible
 
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -24,9 +26,9 @@ const Info = () => {
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
-  const UpdateUser = function(){
+  const UpdateUser = function () {
     //setEditDiv(null);
-    setVisibilityEdit({visibility: 'hidden'})
+    setVisibilityEdit({ visibility: "hidden" });
     let newInUser = {
       id: user.id,
       name: inputs.name || user.name,
@@ -34,20 +36,21 @@ const Info = () => {
       email: inputs.email || user.email,
       phone: inputs.phone || user.phone,
       website: inputs.website || user.website,
-      rank: "user", //?
-      api_key: "zLCyhlxcVRCisJNX9hUt",///?
+      rank: user.rank,
+      api_key: user.api_key,
     };
     //requestsPut("/users", newInUser);//<<<
     setInputs({});
-    
+
     setUser(newInUser);
     var json = JSON.stringify(newInUser);
     localStorage.setItem("currentUser", json);
-  }
+    requestsPut(`/users/${user.id}`, newInUser);
+  };
 
-  const EditUser = function(){
-    setVisibilityEdit({visibility: 'visible'})
-  }
+  const EditUser = function () {
+    setVisibilityEdit({ visibility: "visible" });
+  };
 
   return (
     <div className="info-container">
@@ -67,21 +70,41 @@ const Info = () => {
       )}
       <button onClick={EditUser}>Edit</button>
       <div>
-      <div>
-      <div style={visibilityEdit} className="info-details">
-        <input name="name" className="info-item" type="text"
-            value={inputs.name || "Name"}  onChange={handleChange}/>
-        {/* <input id="UsernameAdit" className="info-item" value="Username"
+        <div>
+          <div style={visibilityEdit} className="info-details">
+            <input
+              name="name"
+              className="info-item"
+              type="text"
+              value={inputs.name || "Name"}
+              onChange={handleChange}
+            />
+            {/* <input id="UsernameAdit" className="info-item" value="Username"
             value={inputs.username || "Username"}/> */}
-        <input  name="email" className="info-item" type="text"
-            value={inputs.email || "Email"}  onChange={handleChange}/>
-        <input name="phone" className="info-item" type="text"
-            value={inputs.phone || "Phone"}  onChange={handleChange}/>
-        <input name="website" className="info-item" type="text"
-            value={inputs.website || "Website"}  onChange={handleChange}/>
-        <button onClick={UpdateUser}>Update</button>
-      </div>
-    </div>
+            <input
+              name="email"
+              className="info-item"
+              type="text"
+              value={inputs.email || "Email"}
+              onChange={handleChange}
+            />
+            <input
+              name="phone"
+              className="info-item"
+              type="text"
+              value={inputs.phone || "Phone"}
+              onChange={handleChange}
+            />
+            <input
+              name="website"
+              className="info-item"
+              type="text"
+              value={inputs.website || "Website"}
+              onChange={handleChange}
+            />
+            <button onClick={UpdateUser}>Update</button>
+          </div>
+        </div>
 
         {editDiv}
       </div>

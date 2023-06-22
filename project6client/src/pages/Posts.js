@@ -98,7 +98,7 @@
 
 // export default Posts;
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import "./Posts.css";
 import {
   requestsGet,
@@ -107,58 +107,47 @@ import {
   requestsDelete,
 } from "../requestsToServer.js";
 
-const Comment = ({ comment, onUpdateComment, onDeleteComment }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [updatedBody, setUpdatedBody] = useState(comment.body);
+const PostForm = ({ onAddPost }) => {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
 
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    setUpdatedBody(comment.body);
-  };
-
-  const handleSaveEdit = () => {
-    onUpdateComment(comment.id, updatedBody);
-    setIsEditing(false);
-  };
-
-  const handleDelete = () => {
-    onDeleteComment(comment.id);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onAddPost({ title, body });
+    setTitle("");
+    setBody("");
   };
 
   return (
-    <div className="comment-item">
-      {!isEditing ? (
-        <div className="comment-body">{comment.body}</div>
-      ) : (
-        <textarea
-          className="comment-edit-input"
-          value={updatedBody}
-          onChange={(e) => setUpdatedBody(e.target.value)}
+    <form className="post-form" onSubmit={handleSubmit}>
+      <h3>Add Post</h3>
+      <div className="form-group">
+        <label htmlFor="title">Title:</label>
+        <input
+          type="text"
+          id="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
         />
-      )}
-      {!isEditing ? (
-        <div className="comment-actions">
-          <button onClick={handleEdit}>Edit</button>
-          <button onClick={handleDelete}>Delete</button>
-        </div>
-      ) : (
-        <div className="comment-actions">
-          <button onClick={handleSaveEdit}>Save</button>
-          <button onClick={handleCancelEdit}>Cancel</button>
-        </div>
-      )}
-    </div>
+      </div>
+      <div className="form-group">
+        <label htmlFor="body">Body:</label>
+        <textarea
+          id="body"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          required
+        ></textarea>
+      </div>
+      <button type="submit">Add</button>
+    </form>
   );
 };
 
 const Post = ({ post, onPostSelect, onUpdatePost, onDeletePost }) => {
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
 
   const handleToggleComments = async () => {
     if (showComments) {
@@ -171,51 +160,6 @@ const Post = ({ post, onPostSelect, onUpdatePost, onDeletePost }) => {
       } catch (error) {
         console.error(error);
       }
-    }
-  };
-
-  const handleAddComment = async (event) => {
-    event.preventDefault();
-    const newCommentData = {
-      postId: post.id,
-      body: newComment,
-    };
-
-    try {
-      const response = await requestsPost("/comments", newCommentData);
-      const createdComment = response.data;
-      setComments([...comments, createdComment]);
-      setNewComment("");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleUpdateComment = async (commentId, updatedBody) => {
-    const updatedCommentData = {
-      body: updatedBody,
-    };
-
-    try {
-      await requestsPut(`/comments/${commentId}`, updatedCommentData);
-      const updatedComments = comments.map((comment) =>
-        comment.id === commentId ? { ...comment, body: updatedBody } : comment
-      );
-      setComments(updatedComments);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleDeleteComment = async (commentId) => {
-    try {
-      await requestsDelete(`/comments/${commentId}`);
-      const updatedComments = comments.filter(
-        (comment) => comment.id !== commentId
-      );
-      setComments(updatedComments);
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -234,24 +178,20 @@ const Post = ({ post, onPostSelect, onUpdatePost, onDeletePost }) => {
       {showComments && (
         <div className="comments-container">
           {comments.map((comment) => (
-            <Comment
-              key={comment.id}
-              comment={comment}
-              onUpdateComment={handleUpdateComment}
-              onDeleteComment={handleDeleteComment}
-            />
+            <div key={comment.id} className="comment-item">
+              <h4 className="comment-name">{comment.name}</h4>
+              <div className="comment-email">{comment.email}</div>
+              <div className="comment-body">{comment.body}</div>
+            </div>
           ))}
-          <form className="comment-form" onSubmit={handleAddComment}>
-            <input
-              type="text"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add a comment..."
-            />
-            <button type="submit">Add Comment</button>
-          </form>
         </div>
       )}
+      <button className="edit-post-btn" onClick={() => onUpdatePost(post.id)}>
+        Edit
+      </button>
+      <button className="delete-post-btn" onClick={() => onDeletePost(post.id)}>
+        Delete
+      </button>
     </div>
   );
 };
@@ -259,6 +199,7 @@ const Post = ({ post, onPostSelect, onUpdatePost, onDeletePost }) => {
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [showAddPostForm, setShowAddPostForm] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -278,54 +219,59 @@ const Posts = () => {
     setSelectedPost(postId);
   };
 
-  const handleAddPost = async () => {
-    const newPostData = {
-      title: "New Post",
-      body: "This is a new post.",
-    };
-
+  const handleAddPost = async (newPost) => {
     try {
-      const response = await requestsPost("/posts", newPostData);
-      const createdPost = response.data;
-      setPosts([...posts, createdPost]);
+      const user = JSON.parse(localStorage.getItem("currentUser"));
+      const createdPost = await requestsPost(
+        `/users/${user.id}/posts`,
+        newPost
+      );
+      setPosts((prevPosts) => [...prevPosts, createdPost]);
+      setShowAddPostForm(false);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleUpdatePost = async (postId, updatedTitle, updatedBody) => {
-    const updatedPostData = {
-      title: updatedTitle,
-      body: updatedBody,
-    };
-
-    try {
-      await requestsPut(`/posts/${postId}`, updatedPostData);
-      const updatedPosts = posts.map((post) =>
-        post.id === postId
-          ? { ...post, title: updatedTitle, body: updatedBody }
-          : post
-      );
-      setPosts(updatedPosts);
-    } catch (error) {
-      console.error(error);
+  const handleUpdatePost = async (postId) => {
+    const updatedTitle = prompt("Enter the new title:");
+    const updatedBody = prompt("Enter the new body:");
+    if (updatedTitle && updatedBody) {
+      try {
+        const updatedPost = await requestsPut(`/posts/${postId}`, {
+          title: updatedTitle,
+          body: updatedBody,
+        });
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => (post.id === postId ? updatedPost : post))
+        );
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
   const handleDeletePost = async (postId) => {
-    try {
-      await requestsDelete(`/posts/${postId}`);
-      const updatedPosts = posts.filter((post) => post.id !== postId);
-      setPosts(updatedPosts);
-    } catch (error) {
-      console.error(error);
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      try {
+        await requestsDelete(`/posts/${postId}`);
+        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
   return (
     <div className="posts-container">
       <h1 className="posts-header">Posts</h1>
-      <button onClick={handleAddPost}>Add New Post</button>
+      <button
+        className="add-post-btn"
+        onClick={() => setShowAddPostForm(!showAddPostForm)}
+      >
+        {showAddPostForm ? "Cancel" : "Add Post"}
+      </button>
+      {showAddPostForm && <PostForm onAddPost={handleAddPost} />}
       <div className="posts-list">
         {posts.map((post) => (
           <Post
