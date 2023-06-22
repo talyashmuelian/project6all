@@ -10,39 +10,43 @@ import {
 const Info = () => {
   const [user, setUser] = useState(null);
   const [editDiv, setEditDiv] = useState(null);
+  const [inputs, setInputs] = useState({});
+  const [visibilityEdit, setVisibilityEdit] = useState({visibility: 'hidden'})// visible
 
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     setUser(currentUser);
   }, []);
 
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs((values) => ({ ...values, [name]: value }));
+  };
+
   const UpdateUser = function(){
-    setEditDiv(null);
+    //setEditDiv(null);
+    setVisibilityEdit({visibility: 'hidden'})
     let newInUser = {
       id: user.id,
-      name: "talyaupdate",
-      username: "talya",
-      email: "talya@karina.biz",
-      phone: "024-648-3800",
-      website: "talya",
-      rank: "user",
-      api_key: "zLCyhlxcVRCisJNX9hUt",
+      name: inputs.name || user.name,
+      username: user.username,
+      email: inputs.email || user.email,
+      phone: inputs.phone || user.phone,
+      website: inputs.website || user.website,
+      rank: "user", //?
+      api_key: "zLCyhlxcVRCisJNX9hUt",///?
     };
-    requestsPut("/users", newInUser);
+    //requestsPut("/users", newInUser);//<<<
+    setInputs({});
+    
+    setUser(newInUser);
+    var json = JSON.stringify(newInUser);
+    localStorage.setItem("currentUser", json);
   }
 
-  const EditeUser = function(){
-    setEditDiv(<div>
-      <div className="info-details">
-            <input id="NameAdit" className="info-item" value="Name"/>
-            <input  id="UsernameAdit" className="info-item" value="Username"/>
-            <input  id="EmailAdit" className="info-item" value="Email"/>
-            <input id="PhoneAdit" className="info-item" value="Phone"/>
-            <input id="WebsiteAdit" className="info-item" value="Website"/>
-            <button onClick={UpdateUser}>edit</button>
-          </div>
-      
-    </div>)
+  const EditUser = function(){
+    setVisibilityEdit({visibility: 'visible'})
   }
 
   return (
@@ -55,15 +59,30 @@ const Info = () => {
             <h3 className="info-item">Name: {user.name}</h3>
             <h3 className="info-item">Username: {user.username}</h3>
             <h3 className="info-item">Email: {user.email}</h3>
-
             <br />
             <h3 className="info-item">Phone: {user.phone}</h3>
             <h3 className="info-item">Website: {user.website}</h3>
           </div>
         </div>
       )}
-      <button onClick={EditeUser}>Update</button>
+      <button onClick={EditUser}>Edit</button>
       <div>
+      <div>
+      <div style={visibilityEdit} className="info-details">
+        <input name="name" className="info-item" type="text"
+            value={inputs.name || "Name"}  onChange={handleChange}/>
+        {/* <input id="UsernameAdit" className="info-item" value="Username"
+            value={inputs.username || "Username"}/> */}
+        <input  name="email" className="info-item" type="text"
+            value={inputs.email || "Email"}  onChange={handleChange}/>
+        <input name="phone" className="info-item" type="text"
+            value={inputs.phone || "Phone"}  onChange={handleChange}/>
+        <input name="website" className="info-item" type="text"
+            value={inputs.website || "Website"}  onChange={handleChange}/>
+        <button onClick={UpdateUser}>Update</button>
+      </div>
+    </div>
+
         {editDiv}
       </div>
     </div>

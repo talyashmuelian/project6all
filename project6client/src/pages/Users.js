@@ -6,7 +6,7 @@ const Users = () => {
   console.log("line6 " + user.id);
   return (
     <div className="users-container">
-      <h1 className="user-name">{user.name}</h1>
+       <h1 className="user-name">{user.username}</h1> {/*//??? */}
       <Link to="/Login">
         <button
           className="logout-button"
