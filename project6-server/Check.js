@@ -9,7 +9,7 @@ const schemaUser = Joi.object().keys({
   email: Joi.string().email().required(),
 
   phone: Joi.string().required(),
-  website: Joi.string().uri().required(),
+  website: Joi.string().required(), //.uri()
   rank: Joi.string().required(),
   api_key: Joi.string().required(),
 });
@@ -39,7 +39,7 @@ const schemaComments = Joi.object().keys({
 const schemaPasswords = Joi.object().keys({
   id: Joi.number().required(),
   username: Joi.string().required(),
-  passwords: Joi.string().required(),
+  password: Joi.string().required(),
 });
 
 const ObjectCheck = {
@@ -56,6 +56,40 @@ exports.check = function (type, object) {
   console.log(type);
   return schema.validate(object);
 };
+
+// let newUser = {
+//   id: 0,
+//   username: "talya2",
+//   password: "2",
+// };
+// //requestsPost("/posts", newPost);
+
+// const { error } = check("passwords", newUser);
+// console.log(error);
+// if (error) {
+//   console.log(error.details[0].message);
+// }
+
+// let newInUser = {
+//   id: 0,
+//   name: "talyaupdate",
+//   username: "talya",
+//   email: "talya@karina.biz",
+//   phone: "024-648-3800",
+//   website: "talya",
+//   rank: "user",
+//   api_key: "zLCyhlxcVRCisJNX9hUt",
+// };
+// requestsPost("/users", newInUser);
+
+// let newUser = {
+//   id: 0,
+//   username: "talya2",
+//   password: "2",
+// };
+// requestsPost("/passwords", newUser);
+
+
 // const { error } = check("todos", {
 //   userId: 3,
 //   id: 1000,
