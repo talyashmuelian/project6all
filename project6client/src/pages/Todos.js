@@ -37,7 +37,7 @@ const Todos = () => {
   const [title, setTitle] = useState("");
   const [updateId, setUpdateId] = useState(null); // New state variable
   const [updateTitle, setUpdateTitle] = useState("");
-  const [updateCompleted, setUpdateCompleted] = useState(false);
+  const [updateCompleted, setUpdateCompleted] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
@@ -64,8 +64,9 @@ const Todos = () => {
       if (todo.id === id) {
         newObj = {
           ...todo,
-          completed: !todo.completed,
+          completed: todo.completed ? 0 : 1,
         };
+
         requestsPut(`/todos/${id}`, newObj);
         return newObj;
       }
@@ -98,7 +99,7 @@ const Todos = () => {
     setTodos(sortedTodos);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     var user = JSON.parse(localStorage.getItem("currentUser"));
     let newTodo = {
@@ -107,9 +108,10 @@ const Todos = () => {
       title: title,
       completed: 0,
     };
-    requestsPost("/todos", newTodo);
-
-    setAddFlag(true); //עדיין צריך לרפרש
+    let newTodoFromServer = await requestsPost("/todos", newTodo);
+    setTodos([...todos, newTodoFromServer]);
+    //setAddFlag(true); //עדיין צריך לרפרש
+    //setAddFlag(false);
   };
 
   // const handleUpdate = (id) => {
@@ -136,14 +138,14 @@ const Todos = () => {
     setUpdateTitle(todoToUpdate.title);
     setUpdateCompleted(todoToUpdate.completed);
   };
-  const handleUpdateSubmit = (event) => {
+  const handleUpdateSubmit = async (event) => {
     event.preventDefault();
     const updatedTodo = {
       ...todos.find((todo) => todo.id === updateId),
       title: updateTitle,
-      completed: updateCompleted,
+      completed: updateCompleted ? 1 : 0,
     };
-    requestsPut(`/todos/${updateId}`, updatedTodo);
+    await requestsPut(`/todos/${updateId}`, updatedTodo);
 
     const updatedTodos = todos.map((todo) =>
       todo.id === updateId ? updatedTodo : todo
@@ -181,24 +183,63 @@ const Todos = () => {
       <div className="background">
         <div className="todos-list">
           {todos.map((todo) => (
+            // <div key={todo.id} className="todo-item">
+            //   <label className="todo-label">
+            //     {/* <span className="todo-id">{todo.id}</span>
+            //      <span className="todo-id">- </span> */}
+            //     <span className="todo-title">{todo.title}</span>
+            //     <input
+            //       type="checkbox"
+            //       className="todo-checkbox"
+            //       checked={todo.completed}
+            //       onChange={() => handleToggleTodo(todo.id)}
+            //     />
+            //     <span className="todo-checkmark"></span>
+            //     <button onClick={() => handleUpdate(todo.id)}>update</button>
+            //     <button onClick={() => handleDelete(todo.id)}>
+            //       delete
+            //     </button>{" "}
+            //     {/* Added delete functionality */}
+            //   </label>
+            //   {updateId === todo.id && (
+            //     <form onSubmit={handleUpdateSubmit}>
+            //       <input
+            //         type="text"
+            //         value={updateTitle}
+            //         onChange={(e) => setUpdateTitle(e.target.value)}
+            //       />
+            //       <label>
+            //         Completed:
+            //         <input
+            //           type="checkbox"
+            //           checked={updateCompleted}
+            //           onChange={(e) =>
+            //             setUpdateCompleted(e.target.checked ? 1 : 0)
+            //           }
+            //         />
+            //       </label>
+            //       <button type="submit">Save</button>
+            //     </form>
+            //   )}
+            // </div>
             <div key={todo.id} className="todo-item">
-              <label className="todo-label">
-                <span className="todo-id">{todo.id}</span>
-                <span className="todo-id">- </span>
+              <div className="todo-content">
+                <label className="todo-label">
+                  <input
+                    type="checkbox"
+                    className="todo-checkbox"
+                    checked={todo.completed}
+                    onChange={() => handleToggleTodo(todo.id)}
+                  />
+                  <span className="todo-checkmark"></span>
+                </label>
                 <span className="todo-title">{todo.title}</span>
-                <input
-                  type="checkbox"
-                  className="todo-checkbox"
-                  checked={todo.completed}
-                  onChange={() => handleToggleTodo(todo.id)}
-                />
-                <span className="todo-checkmark"></span>
-                <button onClick={() => handleUpdate(todo.id)}>update</button>
-                <button onClick={() => handleDelete(todo.id)}>
-                  delete
-                </button>{" "}
-                {/* Added delete functionality */}
-              </label>
+                <div className="todo-buttons">
+                  <button onClick={() => handleUpdate(todo.id)}>Update</button>
+                  <button onClick={() => handleDelete(todo.id)}>Delete</button>
+                </div>
+              </div>
+
               {updateId === todo.id && (
                 <form onSubmit={handleUpdateSubmit}>
                   <input
@@ -211,7 +252,9 @@ const Todos = () => {
                     <input
                       type="checkbox"
                       checked={updateCompleted}
-                      onChange={(e) => setUpdateCompleted(e.target.checked)}
+                      onChange={(e) =>
+                        setUpdateCompleted(e.target.checked ? 1 : 0)
+                      }
                     />
                   </label>
                   <button type="submit">Save</button>

@@ -41,6 +41,8 @@ export async function requestsPost(path, object) {
 }
 
 export async function requestsPut(path, object) {
+  console.log("in put");
+  console.log(object);
   const response = await fetch(hostname + path, {
     method: "PUT",
     body: JSON.stringify(object),

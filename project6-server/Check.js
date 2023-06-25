@@ -32,7 +32,7 @@ const schemaComments = Joi.object().keys({
   postId: Joi.number().required(),
   id: Joi.number().required(),
   name: Joi.string().required(),
-  email: Joi.string().email().required(),
+  email: Joi.string().required(), //.email().
   body: Joi.string().required(),
 });
 
@@ -88,7 +88,6 @@ exports.check = function (type, object) {
 //   password: "2",
 // };
 // requestsPost("/passwords", newUser);
-
 
 // const { error } = check("todos", {
 //   userId: 3,

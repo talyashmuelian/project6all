@@ -1,4 +1,4 @@
-.todos-container {
+/* .todos-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 40px 20px;
@@ -89,4 +89,111 @@
   max-width: 800px;
   margin: 0 auto;
 }
+   */
+
+   .todos-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: left;
+  }
   
+  .todos-header {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .todos-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+  }
+  
+  .todo-item {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .todo-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  
+  .todo-checkbox {
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+    order: -1; /* Place the checkbox at the beginning */
+  }
+  
+  .todo-title {
+    flex-grow: 1;
+    margin-right: 16px;
+    font-weight: bold; /* Make the title bold */
+  }
+  
+  .todo-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    margin-left: 8px;
+  }
+  
+  .todo-checkmark {
+    position: relative;
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    margin-left: 8px;
+  }
+  
+  .todo-label:hover .todo-checkbox ~ .todo-checkmark {
+    background-color: #ccc;
+  }
+  
+  .todo-checkbox:checked ~ .todo-checkmark {
+    background-color: #2196f3;
+  }
+  
+  .todo-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  .todo-checkbox:checked ~ .todo-checkmark:after {
+    display: block;
+  }
+  
+  .todo-checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+  }
+  
+  .selectComp {
+    text-align: center;
+  }
+  
+  .background {
+    background-color: #e6e6fa;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }

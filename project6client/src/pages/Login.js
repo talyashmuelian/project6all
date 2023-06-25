@@ -15,11 +15,14 @@ const Login = () => {
 
   async function fetchData() {
     try {
-      const data = await requestsGet(`/passwords?username=${inputs.username}`);
+      const data = await requestsGet(
+        `/passwords?username=${inputs.username}&password=${inputs.password}`
+      );
+      //const data = await requestsGet(`/passwords?username=${inputs.username}`);
 
       console.log(data);
       let exist = false;
-      if (data[0].password === inputs.password) {
+      if (data.length !== 0) {
         //for (let i of data) {
         // if (
         //   i["username"] === inputs.username &&
@@ -76,7 +79,9 @@ const Login = () => {
           />
         </div>
         <button type="submit">Login</button>
-        <div><Link to={`/register`}>Sign In</Link></div>
+        <div>
+          <Link to={`/register`}>Sign In</Link>
+        </div>
       </form>
     </div>
   );

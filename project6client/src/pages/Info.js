@@ -1,11 +1,6 @@
 import "./Info.css";
 import { useEffect, useState } from "react";
-import {
-  requestsGet,
-  requestsPost,
-  requestsPut,
-  requestsDelete,
-} from "../requestsToServer.js";
+import { requestsPut } from "../requestsToServer.js";
 
 const Info = () => {
   const [user, setUser] = useState(null);
@@ -105,8 +100,6 @@ const Info = () => {
             <button onClick={UpdateUser}>Update</button>
           </div>
         </div>
-
-       
       </div>
     </div>
   );

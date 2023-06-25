@@ -3,9 +3,9 @@ const mysql = require("mysql2");
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "322998386", //"password", // your password here
+  password: "211378658", //"password", // your password here
   port: 3306,
-  database: "FullStackProject6", //- remove comment after first run
+  database: "FullStackProject66", //- remove comment after first run
 });
 
 con.connect(async function (err) {
@@ -17,6 +17,13 @@ let tables = ["users", "todos", "posts", "comments", "passwords"];
 
 exports.get = function (tableName, itemID = {}, moreTableName = "") {
   return new Promise((resolve, reject) => {
+    if (
+      tableName == "passwords" &&
+      (itemID.password == undefined || itemID.username == undefined)
+    ) {
+      reject(new Error("You have no access, the information is confidential"));
+      return;
+    }
     var sql;
     console.log("line 21");
     console.log(itemID);
@@ -25,7 +32,14 @@ exports.get = function (tableName, itemID = {}, moreTableName = "") {
     } else {
       if (moreTableName == "") {
         let q = "";
-        Object.entries(itemID).forEach(([key, value]) => {
+        // Object.entries(itemID).forEach(([key, value]) => {
+        //   q += `${key} = "${value}"`;
+        //   //console.log(`Key: ${key}, Value: ${value}`);
+        // });
+        Object.entries(itemID).forEach(([key, value], i) => {
+          if (i > 0) {
+            q += " AND ";
+          }
           q += `${key} = "${value}"`;
           //console.log(`Key: ${key}, Value: ${value}`);
         });
@@ -129,7 +143,8 @@ exports.put = function (tableName, data) {
               reject(err);
             } else {
               console.log("Member updated successfully.");
-              resolve(result);
+              console.log(result);
+              resolve(data);
             }
           });
         }
@@ -219,7 +234,7 @@ exports.post = function (tableName, data) {
       } else {
         const nextId = result[0].maxId + 1;
         data.id = nextId;
-        if(tableName=="users"){
+        if (tableName == "users") {
           data.api_key = nextId.toString();
         }
 
@@ -228,7 +243,7 @@ exports.post = function (tableName, data) {
             reject(err);
           } else {
             console.log("New member inserted successfully.");
-            resolve(result);
+            resolve(data);
           }
         });
       }

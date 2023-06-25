@@ -77,7 +77,7 @@ app.post("/:collection", (req, res) => {
   DBPlaceholder.post(collection, req.body)
     .then((result) => {
       console.log(result); // Access the result array here
-      res.send(result);
+      return res.send(result);
     })
     .catch((error) => {
       console.error(error); // Handle any errors here
@@ -113,24 +113,29 @@ app.put("/:collection/:id", (req, res) => {
   const collection = req.params.collection;
   // check body
   // res.status(400).send("bad request")
-  //const { error } = Check.check(collection, req.body);
+  const { error } = Check.check(collection, req.body);
+
+  if (error) {
+    console.log(error.details[0].message);
+    return res.status(400).send(error.details[0].message);
+  }
 
   DBPlaceholder.put(collection, req.body)
     .then((result) => {
       console.log(result); // Access the result array here
-      res.send(result);
+      return res.send(result);
     })
     .catch((error) => {
       console.error(error); // Handle any errors here
     });
 
-  if (error) {
-    return res.send(error.details[0].message); //.status(400)
-  }
+  // if (error) {
+  //   return res.send(error.details[0].message); //.status(400)
+  // }
 
-  if (!DBPlaceholder.get(collection, req.params.id)) {
-    return res.status(404).send("Not Found");
-  }
+  // if (!DBPlaceholder.get(collection, req.params.id)) {
+  //   return res.status(404).send("Not Found");
+  // }
   // if (DBPlaceholder.put(collection, req.body)) {
   //   return res.send("Added successfully");
   // }
@@ -143,14 +148,14 @@ app.delete("/:collection/:id", (req, res) => {
   DBPlaceholder.deletee(collection, req.params.id)
     .then((result) => {
       console.log(result); // Access the result array here
-      res.send(result);
+      return res.send(result);
     })
     .catch((error) => {
       console.error(error); // Handle any errors here
       return res.send("Internal Server Error");
     });
   //if (!flage) return res.status(404).send("Not Found");
-  res.send("Delete");
+  //res.send("Delete");
 });
 app.listen(4000, () => console.log("listen"));
 // class Server {
