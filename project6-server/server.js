@@ -64,11 +64,12 @@ app.get("/:collection/:id/:moreCollection", (req, res) => {
 
 app.post("/:collection", (req, res) => {
   const collection = req.params.collection;
-  // const { error } = Check.check(collection, req.body);
+  const { error } = Check.check(collection, req.body);
 
-  // if (error) {
-  //   return res.status(400).send(error.details[0].message);
-  // }
+  if (error) {
+    console.log(error.details[0].message);
+    return res.status(400).send(error.details[0].message);
+  }
 
   console.log("line 62");
   console.log(req.body);

@@ -6,7 +6,7 @@ const schemaUser = Joi.object().keys({
   id: Joi.number().required(),
   name: Joi.string().required(),
   username: Joi.string().required(),
-  email: Joi.string().email().required(),
+  email: Joi.string().required(), //.email()
 
   phone: Joi.string().required(),
   website: Joi.string().required(), //.uri()

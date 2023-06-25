@@ -30,6 +30,7 @@ const Registration = () => {
   async function fetchData() {
     try {
       //const data = await
+      console.log(user);
       requestsPost(`/passwords`, user);
       setUser({
         id: 0,
@@ -49,19 +50,20 @@ const Registration = () => {
       setvisibilityMoreInfo({visibility: "hidden"})
       let newInUser = {
         id: user.id,
-        name: inputs.name || user.name,
+        name: inputs.name || "name",
         username: user.username,
-        email: inputs.email || user.email,
-        phone: inputs.phone || user.phone,
-        website: inputs.website || user.website,
-        rank: "", //??
-        api_key: "", //???
+        email: inputs.email || "email",
+        phone: inputs.phone || "0",
+        website: inputs.website || "website",
+        rank: "user", //??
+        api_key: "0", //???
       };
       //requestsPut("/users", newInUser);//<<<
       setInputs({});
   
       var json = JSON.stringify(newInUser);
-      localStorage.setItem("currentUser", json);
+      //localStorage.setItem("currentUser", json);
+      console.log(newInUser);
       requestsPost(`/users`, newInUser);
 
     } catch (error) {
@@ -73,27 +75,36 @@ const Registration = () => {
     setvisibilityMoreInfo({ visibility: "visible" });
   };
 
-  const handleSubmit = (event) => {
-    //debugger;
-    event.preventDefault();
-    console.log("line36");
-    console.log(user);
-    //setUser({ id: 0, username: user.username, password: user.password });???
-    fetchInfo()
-    fetchData();
+  const handleSubmit = async (event) => {
+    try{
+      //debugger;
+      event.preventDefault();
+      console.log("line36");
+      console.log(user);
+      //setUser({ id: 0, username: user.username, password: user.password });???
+      await fetchInfo();
+      await fetchData();
 
-/*  requestsPost(`/passwords`, user);
-    setUser({
-      id: "",
-      username: "",
-      password: "",
-    });
-    //console.log(data);
-*/
+      /*  requestsPost(`/passwords`, user);
+      setUser({
+        id: "",
+        username: "",
+        password: "",
+      });
+      //console.log(data);
+      */
+
+      // Perform registration logic or API request here
+      // Reset the form fields
+
+
+      window.location.href = "/Login";
+    }
+    catch{
+      //error
+    }
     
-    // Perform registration logic or API request here
-    // Reset the form fields
-    window.location.href = "/Login";
+    
   };
 
   return (
