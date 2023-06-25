@@ -118,7 +118,6 @@ const Post = ({ post, onUpdatePost, onDeletePost }) => {
 
   const handleAddComment = async () => {
     try {
-      //const createdComment = await requestsPost(`/posts/${post.id}/comments`, {
       const createdComment = {
         postId: post.id,
         id: 0,
@@ -154,35 +153,6 @@ const Post = ({ post, onUpdatePost, onDeletePost }) => {
     );
     setComments(updatedComments);
   };
-
-  // const handleUpdateComment = async (updatedComment) => {
-  //   try {
-  //     console.log("line252");
-  //     console.log(updatedComment);
-  //     await requestsPut(`/comments/${updatedComment.id}`, updatedComment);
-  //     const updatedComments = comments.map((comment) => {
-  //       if (comment.id === updatedComment.id) {
-  //         return updatedComment;
-  //       }
-  //       return comment;
-  //     });
-  //     setComments(updatedComments);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // const handleDeleteComment = async (commentId) => {
-  //   try {
-  //     await requestsDelete(`/comments/${commentId}`);
-  //     const updatedComments = comments.filter(
-  //       (comment) => comment.id !== commentId
-  //     );
-  //     setComments(updatedComments);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const handleEditPost = () => {
     setEditing(true);
@@ -260,16 +230,6 @@ const Post = ({ post, onUpdatePost, onDeletePost }) => {
                   onDeleteComment={handleDeleteComment}
                 />
               ))}
-              {/* {comments.map((comment) => (
-                <Comment
-                  key={comment.id}
-                  comment={comment}
-                  onUpdateComment={(updatedComment) =>
-                    handleUpdateComment(updatedComment)
-                  }
-                  onDeleteComment={() => handleDeleteComment(comment.id)}
-                />
-              ))} */}
               <div className="comment-form">
                 <input
                   type="text"
@@ -346,22 +306,6 @@ const Posts = () => {
       console.error(error);
     }
   };
-
-  // const handleAddPost = async () => {
-  //   try {
-  //     var user = JSON.parse(localStorage.getItem("currentUser"));
-  //     const createdPost = await requestsPost(`/posts`, {
-  //       userId: user.id,
-  //       id: 0,
-  //       title: newPost.title,
-  //       body: newPost.body,
-  //     });
-  //     setPosts([...posts, createdPost]);
-  //     setNewPost({ title: "", body: "" });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const handleUpdatePost = (updatedPost) => {
     const updatedPosts = posts.map((post) => {

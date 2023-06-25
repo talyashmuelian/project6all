@@ -18,16 +18,10 @@ const Login = () => {
       const data = await requestsGet(
         `/passwords?username=${inputs.username}&password=${inputs.password}`
       );
-      //const data = await requestsGet(`/passwords?username=${inputs.username}`);
 
       console.log(data);
       let exist = false;
       if (data.length !== 0) {
-        //for (let i of data) {
-        // if (
-        //   i["username"] === inputs.username &&
-        //   i["password"] === inputs.password
-        // )
         {
           const dataUser = await requestsGet(
             `/users?username=${inputs.username}`

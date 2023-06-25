@@ -44,11 +44,6 @@ const Todos = () => {
       try {
         var user = JSON.parse(localStorage.getItem("currentUser"));
         const data = await requestsGet(`/users/${user.id}/todos`);
-
-        // const response = await fetch(
-        //   `http://localhost:4000/users/${user.id}/todos`
-        // );
-        // const data = await response.json();
         setTodos(data);
       } catch (error) {
         console.error(error);
@@ -110,27 +105,7 @@ const Todos = () => {
     };
     let newTodoFromServer = await requestsPost("/todos", newTodo);
     setTodos([...todos, newTodoFromServer]);
-    //setAddFlag(true); //עדיין צריך לרפרש
-    //setAddFlag(false);
   };
-
-  // const handleUpdate = (id) => {
-  //   let updatedTodo;
-  //   const updatedTodos = todos.map((todo) => {
-  //     if (todo.id === id) {
-  //       updatedTodo = {
-  //         ...todo,
-  //         title: "updated is work",
-  //         completed: 1,
-  //       };
-  //       requestsPut(`/todos/${id}`, updatedTodo);
-  //       return updatedTodo;
-  //     }
-  //     return todo;
-  //   });
-
-  //   setTodos(updatedTodos);
-  // };
 
   const handleUpdate = (id) => {
     setUpdateId(id); // Set the ID of the todo to be updated
@@ -183,45 +158,6 @@ const Todos = () => {
       <div className="background">
         <div className="todos-list">
           {todos.map((todo) => (
-            // <div key={todo.id} className="todo-item">
-            //   <label className="todo-label">
-            //     {/* <span className="todo-id">{todo.id}</span>
-            //      <span className="todo-id">- </span> */}
-            //     <span className="todo-title">{todo.title}</span>
-            //     <input
-            //       type="checkbox"
-            //       className="todo-checkbox"
-            //       checked={todo.completed}
-            //       onChange={() => handleToggleTodo(todo.id)}
-            //     />
-            //     <span className="todo-checkmark"></span>
-            //     <button onClick={() => handleUpdate(todo.id)}>update</button>
-            //     <button onClick={() => handleDelete(todo.id)}>
-            //       delete
-            //     </button>{" "}
-            //     {/* Added delete functionality */}
-            //   </label>
-            //   {updateId === todo.id && (
-            //     <form onSubmit={handleUpdateSubmit}>
-            //       <input
-            //         type="text"
-            //         value={updateTitle}
-            //         onChange={(e) => setUpdateTitle(e.target.value)}
-            //       />
-            //       <label>
-            //         Completed:
-            //         <input
-            //           type="checkbox"
-            //           checked={updateCompleted}
-            //           onChange={(e) =>
-            //             setUpdateCompleted(e.target.checked ? 1 : 0)
-            //           }
-            //         />
-            //       </label>
-            //       <button type="submit">Save</button>
-            //     </form>
-            //   )}
-            // </div>
             <div key={todo.id} className="todo-item">
               <div className="todo-content">
                 <label className="todo-label">
@@ -269,30 +205,3 @@ const Todos = () => {
 };
 
 export default Todos;
-
-// let newPost = {
-//   userId: user.id,
-//   id: 0,
-//   title: title,
-//   body: "body",
-// };
-// requestsPost("/posts", newPost);
-
-// let newInUser = {
-//   id: 0,
-//   name: "talyaupdate",
-//   username: "talya",
-//   email: "talya@karina.biz",
-//   phone: "024-648-3800",
-//   website: "talya",
-//   rank: "user",
-//   api_key: "zLCyhlxcVRCisJNX9hUt",
-// };
-// requestsPost("/users", newInUser);
-
-// let newUser = {
-//   id: 0,
-//   username: "talya2",
-//   password: "2",
-// };
-// requestsPost("/passwords", newUser);

@@ -1,6 +1,5 @@
 const hostname = "http://localhost:4000";
 //const hostname = "https://jsonplaceholder.typicode.com";
-//"http://localhost:4000";
 
 export async function requestsGet(path) {
   console.log(hostname + path);
@@ -9,18 +8,7 @@ export async function requestsGet(path) {
 }
 
 export async function requestsPost(path, object) {
-  // console.log("line 12 in requestsPost");
-  // console.log(JSON.stringify(object));
-  // const response = await fetch(hostname + path, {
-  //   method: "POST",
-  //   body: JSON.stringify(object),
-  //   headers: {
-  //     "Content-type": "application/json",
-  //   },
-  // });
-  // return await response.json();
   let requestBody;
-
   if (typeof object === "string") {
     requestBody = object;
   } else {

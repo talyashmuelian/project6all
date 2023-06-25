@@ -4,11 +4,10 @@ import { requestsPut } from "../requestsToServer.js";
 
 const Info = () => {
   const [user, setUser] = useState(null);
-  //const [editDiv, setEditDiv] = useState(null);
   const [inputs, setInputs] = useState({});
   const [visibilityEdit, setVisibilityEdit] = useState({
     visibility: "hidden",
-  }); // visible
+  });
 
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -22,7 +21,6 @@ const Info = () => {
   };
 
   const UpdateUser = function () {
-    //setEditDiv(null);
     setVisibilityEdit({ visibility: "hidden" });
     let newInUser = {
       id: user.id,
@@ -34,7 +32,6 @@ const Info = () => {
       rank: user.rank,
       api_key: user.api_key,
     };
-    //requestsPut("/users", newInUser);//<<<
     setInputs({});
 
     setUser(newInUser);
@@ -74,8 +71,6 @@ const Info = () => {
               value={inputs.name || "Name"}
               onChange={handleChange}
             />
-            {/* <input id="UsernameAdit" className="info-item" value="Username"
-            value={inputs.username || "Username"}/> */}
             <input
               name="email"
               className="info-item"

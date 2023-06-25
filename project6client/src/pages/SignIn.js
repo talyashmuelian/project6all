@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ReactDOM from "react-dom/client";
+//import ReactDOM from "react-dom/client";
 import "./Registration.css";
 import { Link } from "react-router-dom";
 import { requestsPost } from "../requestsToServer";
@@ -11,9 +11,9 @@ const Registration = () => {
     password: "",
   });
   const [inputs, setInputs] = useState({});
-  const [visibilityMoreInfo, setvisibilityMoreInfo] = useState({
-    visibility: "hidden"
-  }); // visible
+  // const [visibilityMoreInfo, setvisibilityMoreInfo] = useState({
+  //   visibility: "hidden"
+  // });
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -29,7 +29,6 @@ const Registration = () => {
 
   async function fetchData() {
     try {
-      //const data = await
       console.log(user);
       requestsPost(`/passwords`, user);
       setUser({
@@ -37,8 +36,6 @@ const Registration = () => {
         username: "",
         password: "",
       });
-      //console.log(data);
-
     } catch (error) {
       console.error(error);
     }
@@ -46,7 +43,6 @@ const Registration = () => {
 
   async function fetchInfo() {
     try {
-      //const data = await
       setvisibilityMoreInfo({visibility: "hidden"})
       let newInUser = {
         id: user.id,
@@ -55,14 +51,11 @@ const Registration = () => {
         email: inputs.email || "email",
         phone: inputs.phone || "0",
         website: inputs.website || "website",
-        rank: "user", //??
-        api_key: "0", //???
+        rank: "user", 
+        api_key: "0",
       };
-      //requestsPut("/users", newInUser);//<<<
       setInputs({});
-  
-      var json = JSON.stringify(newInUser);
-      //localStorage.setItem("currentUser", json);
+      //var json = JSON.stringify(newInUser);
       console.log(newInUser);
       requestsPost(`/users`, newInUser);
 
@@ -71,33 +64,17 @@ const Registration = () => {
     }
   }
 
-  const MoreInfo = function () {
-    setvisibilityMoreInfo({ visibility: "visible" });
-  };
+  // const MoreInfo = function () {
+  //   setvisibilityMoreInfo({ visibility: "visible" });
+  // };
 
   const handleSubmit = async (event) => {
     try{
-      //debugger;
       event.preventDefault();
       console.log("line36");
       console.log(user);
-      //setUser({ id: 0, username: user.username, password: user.password });???
       await fetchInfo();
       await fetchData();
-
-      /*  requestsPost(`/passwords`, user);
-      setUser({
-        id: "",
-        username: "",
-        password: "",
-      });
-      //console.log(data);
-      */
-
-      // Perform registration logic or API request here
-      // Reset the form fields
-
-
       window.location.href = "/Login";
     }
     catch{
@@ -135,9 +112,8 @@ const Registration = () => {
         <div>
           <Link to={`/Login`}>Login</Link>
         </div>
-        {/* <button onClick={MoreInfo}>More Info</button> */}
         <h3>More Info</h3>
-         <div  className="info-details"> {/*style={visibilityMoreInfo} */}
+         <div  className="info-details">
           <input
             name="name"
             className="info-item"
@@ -145,8 +121,6 @@ const Registration = () => {
             value={inputs.name || "Name"}
             onChange={handleChangeI}
           />
-          {/* <input id="UsernameAdit" className="info-item" value="Username"
-          value={inputs.username || "Username"}/> */}
           <input
             name="email"
             className="info-item"
