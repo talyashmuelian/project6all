@@ -9,7 +9,7 @@ import {
 
 const Info = () => {
   const [user, setUser] = useState(null);
-  const [editDiv, setEditDiv] = useState(null);
+  //const [editDiv, setEditDiv] = useState(null);
   const [inputs, setInputs] = useState({});
   const [visibilityEdit, setVisibilityEdit] = useState({
     visibility: "hidden",
@@ -106,7 +106,7 @@ const Info = () => {
           </div>
         </div>
 
-        {editDiv}
+       
       </div>
     </div>
   );

@@ -3,9 +3,9 @@ const mysql = require("mysql2");
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "211378658", //"password", // your password here
+  password: "322998386", //"password", // your password here
   port: 3306,
-  database: "FullStackProject66", //- remove comment after first run
+  database: "FullStackProject6", //- remove comment after first run
 });
 
 con.connect(async function (err) {
