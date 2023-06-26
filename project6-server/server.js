@@ -1,8 +1,9 @@
 const express = require("express");
 app = express();
+const cors = require("cors");
 app.use(cors());
 app.use(express.json());
-const cors = require("cors");
+
 var DBPlaceholder = require("./DBPlaceholder");
 var Check = require("./Check");
 //const hostname = "jsonplaceholder.typicode.com";
@@ -108,6 +109,5 @@ app.delete("/:collection/:id", (req, res) => {
       return res.send("Internal Server Error");
     });
 });
-
 
 app.listen(4000, () => console.log("listen"));

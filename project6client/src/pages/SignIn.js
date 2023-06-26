@@ -11,9 +11,9 @@ const Registration = () => {
     password: "",
   });
   const [inputs, setInputs] = useState({});
-  // const [visibilityMoreInfo, setvisibilityMoreInfo] = useState({
-  //   visibility: "hidden"
-  // });
+  const [visibilityMoreInfo, setvisibilityMoreInfo] = useState({
+    visibility: "hidden",
+  });
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -43,7 +43,7 @@ const Registration = () => {
 
   async function fetchInfo() {
     try {
-      setvisibilityMoreInfo({visibility: "hidden"})
+      setvisibilityMoreInfo({ visibility: "hidden" });
       let newInUser = {
         id: user.id,
         name: inputs.name || "name",
@@ -51,37 +51,33 @@ const Registration = () => {
         email: inputs.email || "email",
         phone: inputs.phone || "0",
         website: inputs.website || "website",
-        rank: "user", 
+        rank: "user",
         api_key: "0",
       };
       setInputs({});
       //var json = JSON.stringify(newInUser);
       console.log(newInUser);
       requestsPost(`/users`, newInUser);
-
     } catch (error) {
       console.error(error);
     }
   }
 
-  // const MoreInfo = function () {
-  //   setvisibilityMoreInfo({ visibility: "visible" });
-  // };
+  const MoreInfo = function () {
+    setvisibilityMoreInfo({ visibility: "visible" });
+  };
 
   const handleSubmit = async (event) => {
-    try{
+    try {
       event.preventDefault();
       console.log("line36");
       console.log(user);
       await fetchInfo();
       await fetchData();
       window.location.href = "/Login";
-    }
-    catch{
+    } catch {
       //error
     }
-    
-    
   };
 
   return (
@@ -113,7 +109,7 @@ const Registration = () => {
           <Link to={`/Login`}>Login</Link>
         </div>
         <h3>More Info</h3>
-         <div  className="info-details">
+        <div className="info-details">
           <input
             name="name"
             className="info-item"
@@ -142,9 +138,8 @@ const Registration = () => {
             value={inputs.website || "Website"}
             onChange={handleChangeI}
           />
-      </div>
+        </div>
       </form>
- 
     </div>
   );
 };
